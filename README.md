@@ -18,7 +18,7 @@ Initially you can use `--generate-secret` to generate a secret file.
 3. Run discovery:
 
 ```bash
-cargo run --package rendezvous-client --bin registration -- 
+cargo run --package rendezvous-client --bin discovery -- 
 --rendezvous-addr RENDEZVOUS_SERVER_MULTIADDR
 --rendezvous-peer-id RENDEZVOUS_SERVER_PEER_ID
 --namespace SOME_NAMESPACE
