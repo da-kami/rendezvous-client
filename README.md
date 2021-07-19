@@ -15,7 +15,7 @@
 
    2. For repetitive registration run:
    ```bash
-      cargo run --package rendezvous-client --bin registration -- \
+      cargo run --package rendezvous-client --bin repetitive -- \
       --rendezvous-addr RENDEZVOUS_SERVER_MULTIADDR \
       --rendezvous-peer-id RENDEZVOUS_SERVER_PEER_ID \
       --external-addr /ip4/127.0.0.1/tcp/9999 \
