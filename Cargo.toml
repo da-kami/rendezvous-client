@@ -9,6 +9,10 @@ name = "registration"
 path = "src/register_once.rs"
 
 [[bin]]
+name = "repetitive"
+path = "src/register_repetitive.rs"
+
+[[bin]]
 name = "discovery"
 path = "src/discover_once.rs"
 
