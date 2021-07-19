@@ -19,6 +19,10 @@ struct Cli {
     rendezvous_addr: Multiaddr,
     #[structopt(long)]
     namespace: String,
+    /// Compose the ping behaviour together with the rendezvous behaviour in
+    /// case a rendezvous server with Ping is required. This feature will be removed once https://github.com/libp2p/rust-libp2p/issues/2109 is fixed.
+    #[structopt(long)]
+    ping: bool,
 }
 
 #[tokio::main]
@@ -38,7 +42,7 @@ async fn main() -> Result<()> {
 
     let peer_id = PeerId::from(identity.public());
 
-    let mut swarm = SwarmBuilder::new(transport, Behaviour::new(rendezvous), peer_id)
+    let mut swarm = SwarmBuilder::new(transport, Behaviour::new(rendezvous, cli.ping), peer_id)
         .executor(Box::new(|f| {
             tokio::spawn(f);
         }))
