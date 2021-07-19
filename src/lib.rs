@@ -9,6 +9,7 @@ use libp2p::mplex::MplexConfig;
 use libp2p::noise::{NoiseConfig, X25519Spec};
 use libp2p::ping::{Ping, PingConfig, PingEvent};
 use libp2p::rendezvous::Rendezvous;
+use libp2p::swarm::toggle::Toggle;
 use libp2p::yamux::YamuxConfig;
 use libp2p::{noise, rendezvous, NetworkBehaviour, PeerId, Transport};
 use std::fmt::Debug;
@@ -40,21 +41,27 @@ impl From<PingEvent> for Event {
 #[behaviour(event_process = false)]
 #[behaviour(out_event = "Event")]
 pub struct Behaviour {
-    ping: Ping,
+    ping: Toggle<Ping>,
     pub rendezvous: Rendezvous,
 }
 
 impl Behaviour {
     #[allow(dead_code)]
-    pub fn new(rendezvous: Rendezvous) -> Self {
-        Self {
-            // TODO: Remove Ping behaviour once https://github.com/libp2p/rust-libp2p/issues/2109 is fixed
-            // interval for sending Ping set to 24 hours
-            ping: Ping::new(
+    pub fn new(rendezvous: Rendezvous, ping: bool) -> Self {
+        let ping = if ping {
+            Toggle::from(Some(Ping::new(
                 PingConfig::new()
                     .with_keep_alive(false)
                     .with_interval(Duration::from_secs(86_400)),
-            ),
+            )))
+        } else {
+            Toggle::from(None)
+        };
+
+        Self {
+            // TODO: Remove Ping behaviour once https://github.com/libp2p/rust-libp2p/issues/2109 is fixed
+            // interval for sending Ping set to 24 hours
+            ping,
             rendezvous,
         }
     }
